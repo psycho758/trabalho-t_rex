@@ -34,6 +34,7 @@ function movimento(){
     dinossauro.velocityY = -10;
   }
   dinossauro.velocityY += 0.6;
+  
 
 
 }

@@ -46,28 +46,30 @@ function preload(){
 }
 
 function setup(){
-  createCanvas(600,200);
-  dinossauro = createSprite(70,40,50,70);
+  createCanvas(windowWidth,windowHeight);
+  dinossauro = createSprite(70,height-40,50,70);
   dinossauro.addAnimation("correndo",animation1);
   dinossauro.addAnimation("bateu",batida);
   dinossauro.scale = 0.5;
   dinossauro.depth = 20;
-  chao = createSprite(200,180,400,20);
+  chao = createSprite(200,height-45,400,20);
   chao.addImage("chão",animation2);
   chao.x = chao.width/2;
-  chao_invisivel = createSprite(20,198,400,20);
+  chao_invisivel = createSprite(width/2,height-10,width,50);
   chao_invisivel.visible = false;
   cacto_2 = new Group();
   grupo_nuvens = new Group();
   dinossauro.debug = false;
   //dinossauro.setCollider("rectangle",0,0,270,dinossauro.height -10);
   dinossauro.setCollider("circle",0,0,47);
-  gameOver = createSprite(280,30,40,40);
+  gameOver = createSprite(639,800,40,40);
   gameOver.addImage(fim);
   gameOver.visible = false;
-  replay = createSprite(273,100,20,20);
+  replay = createSprite(620,860,20,20);
   replay.addImage(recomeco);
   replay.visible = false;
+  var mensagem = "sim";
+  console.log(mensagem);
 }
 
 function draw(){
@@ -86,9 +88,10 @@ function draw(){
     GAME_OVER();
   }
   drawSprites();
-  text("pontuação em metros: " + metros,400,60);
+  text("pontuação em metros: " + metros,970,height-200);
 
   dinossauro.collide(chao_invisivel);
+  //console.log(mensagem);
 }
 
 function jogando(){
@@ -108,10 +111,26 @@ function GAME_OVER(){
   replay.visible = true;
   gameOver.visible = true;
   ver_pos_mouse();
-chao.velocityX = 0;
-grupo_nuvens.setVelocityXEach(0);
-cacto_2.setVelocityXEach(0);
+  chao.velocityX = 0;
+  grupo_nuvens.setVelocityXEach(0);
+  cacto_2.setVelocityXEach(0);
+  if(mousePressedOver(replay)){
+    console.log("reniciar");
+    reset();
+  }
 }
+
+function reset(){
+  estado = JOGANDO;
+  metros = 0;
+  cacto_2.destroyEach();
+  grupo_nuvens.destroyEach();
+  replay.visible = false;
+  gameOver.visible = false;
+  dinossauro.changeAnimation("correndo",animation1);
+}
+
+
 
 function pontos(){
   if(frameCount%2 === 0){
@@ -151,7 +170,7 @@ function ver_pos_mouse(){
 
 function nuvens(){
   if(frameCount%70 === 0){
-    nuvem = createSprite(610,numeros,30,15);
+    nuvem = createSprite(860,height-(200- numeros),30,15);
     nuvem.velocityX = -6;
     nuvem.addImage(animation3);
     nuvem.depth = 1;
@@ -161,7 +180,7 @@ function nuvens(){
 }
 function cactos(){
   if(frameCount%60 ===  0){
-    cacto = createSprite(610,170,18,20);  
+    cacto = createSprite(860,height-40,18,20);  
     cacto.velocityX  = -(10 + metros/100);
     cacto.scale = 0.6;
     cacto.lifetime = 120;
